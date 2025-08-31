@@ -2,8 +2,6 @@ import express from 'express'
 import cors from 'cors'
 import  rootRouter  from './routers/rootRoute.js'
 
-
-
 const app = express()
 
 app.listen(8080)
@@ -13,6 +11,8 @@ app.use(express.json())
 app.use(cors())
 
 app.use("/api", rootRouter)
+
+app.use(express.static("."))
 
 
 // yarn init to create a package.json file
