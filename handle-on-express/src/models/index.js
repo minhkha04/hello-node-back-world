@@ -1,9 +1,10 @@
 import { Sequelize } from 'sequelize'
+import config from '../config/config.js'
 
-let sequelize = new Sequelize('node', 'root', 'minhkha1606', {
-    host: 'localhost',
-    dialect: 'mysql',
-    port: '3306'
+let sequelize = new Sequelize(config.database, config.user, config.password, {
+    host: config.host,
+    dialect: config.dialect,
+    port: config.port
 })
 
 try {
