@@ -1,12 +1,17 @@
 import { Sequelize } from "sequelize"
-import Food from "../models/food.js"
+import initModels from "../models/init-models.js"
+import sequelize from "../models/index.js"
+
+const models = initModels(sequelize)
 
 const Op = Sequelize.Op
 
 const getFoodAll = async (req, res) => {
     try {
-        const foods = await Food.findAll()
-        res.status(200).send(foods)
+        const data = await models.foods.findAll({
+            include: ["food_type"]
+        })
+        res.status(200).send(data)
     } catch (error) {
         console.error("Error fetching foods:", error)
         res.status(500).send({ error: "Internal server error" })
@@ -15,7 +20,7 @@ const getFoodAll = async (req, res) => {
 
 const createFood = async (req, res) => {
     try {
-        const newFood = await Food.create(req.body)
+        const newFood = await models.foods.create(req.body)
         res.status(201).send(newFood)
     } catch (error) {
         console.error("Error creating food:", error)
@@ -26,7 +31,7 @@ const createFood = async (req, res) => {
 const updateFood = async (req, res) => {
     try {
         let { id, name, food_type_id } = req.body
-        let foodUpdate = await Food.findOne({
+        let foodUpdate = await models.foods.findOne({
             where: { id }
         })
         if (!foodUpdate) {
@@ -34,7 +39,7 @@ const updateFood = async (req, res) => {
             return
         }
 
-        Food.update(
+        await models.foods.update(
             { name, food_type_id },
             { where: { id } }
         )
@@ -48,14 +53,14 @@ const updateFood = async (req, res) => {
 
 const deleteFood = async (req, res) => {
     let { id } = req.params
-    let foodUpdate = await Food.findOne({
+    let foodUpdate = await models.foods.findOne({
         where: { id }
     })
     if (!foodUpdate) {
         res.status(404).send({ error: "Food not found" })
         return
     }
-    Food.destroy({
+    models.foods.destroy({
         where: { id }
     })
 
