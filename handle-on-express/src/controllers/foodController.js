@@ -67,9 +67,23 @@ const deleteFood = async (req, res) => {
     successCode(res, null, "Food deleted successfully")
 }
 
+const getFoodWithPaging = async (req, res) => {
+    let { page, pageSize } = req.params
+    let index = (page - 1) * pageSize
+
+    let data = await models.foods.findAll({
+        offset: index,
+        limit: pageSize*1
+    })
+
+    successCode(res, data, "Fetch foods with paging successfully")
+}
+
+
 export {
     getFoodAll,
     createFood,
     updateFood,
-    deleteFood
+    deleteFood,
+    getFoodWithPaging
 }
