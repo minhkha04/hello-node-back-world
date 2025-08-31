@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize"
 import initModels from "../models/init-models.js"
 import sequelize from "../models/index.js"
+import { errorCode, successCode } from "../config/response.js"
 
 const models = initModels(sequelize)
 
@@ -11,20 +12,20 @@ const getFoodAll = async (req, res) => {
         const data = await models.foods.findAll({
             include: ["food_type"]
         })
-        res.status(200).send(data)
+        successCode(res, data, "Fetch foods successfully")
     } catch (error) {
         console.error("Error fetching foods:", error)
-        res.status(500).send({ error: "Internal server error" })
+        errorCode(res, "Internal server error")
     }
 }
 
 const createFood = async (req, res) => {
     try {
         const newFood = await models.foods.create(req.body)
-        res.status(201).send(newFood)
+        successCode(res, newFood, "Food created successfully")
     } catch (error) {
         console.error("Error creating food:", error)
-        res.status(500).send({ error: "Internal server error" })
+        errorCode(res, "Internal server error")
     }
 }
 
@@ -35,7 +36,7 @@ const updateFood = async (req, res) => {
             where: { id }
         })
         if (!foodUpdate) {
-            res.status(404).send({ error: "Food not found" })
+            errorCode(res, "Food not found")
             return
         }
 
@@ -43,11 +44,11 @@ const updateFood = async (req, res) => {
             { name, food_type_id },
             { where: { id } }
         )
-        res.status(200).send({ message: "Food updated successfully" })
+        successCode(res, { id, name, food_type_id }, "Food updated successfully")
 
     } catch (error) {
         console.error("Error updating food:", error)
-        res.status(500).send({ error: "Internal server error" })
+        errorCode(res, "Internal server error")
     }
 }
 
@@ -57,14 +58,13 @@ const deleteFood = async (req, res) => {
         where: { id }
     })
     if (!foodUpdate) {
-        res.status(404).send({ error: "Food not found" })
+        errorCode(res, "Food not found")
         return
     }
     models.foods.destroy({
         where: { id }
     })
-
-    res.status(200).send({ message: "Food deleted successfully" })
+    successCode(res, null, "Food deleted successfully")
 }
 
 export {
