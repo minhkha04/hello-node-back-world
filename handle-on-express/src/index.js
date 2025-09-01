@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import  rootRouter  from './routers/rootRoute.js'
+import rootRouter from './routers/rootRoute.js'
 
 const app = express()
 
@@ -14,6 +14,23 @@ app.use("/api", rootRouter)
 
 app.use(express.static("."))
 
+import swaggerUi from "swagger-ui-express";
+
+import swaggerJsDoc from "swagger-jsdoc";
+
+const options = {
+    definition: {
+        info: {
+            title: "api",
+            version: "1.0.0",
+        },
+    },
+    apis: ["src/swagger/index.js"],
+};
+
+const specs = swaggerJsDoc(options);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // yarn init to create a package.json file
 
