@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -8,18 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Car {
-  id Int @id @default(autoincrement())
-  name String
-  price Float
-  type_id Int
-
-  car_type Car_Type @relation(fields: [type_id], references: [id])
+model food_types {
+  id    Int     @id @default(autoincrement())
+  type  String  @db.VarChar(255)
+  foods foods[]
 }
 
-model Car_Type {
-  id Int @id @default(autoincrement())
-  name String
+model foods {
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(255)
+  food_type_id Int
+  food_types   food_types @relation(fields: [food_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_foods_food_types")
 
-  cars Car[]
+  @@index([food_type_id], map: "FK_foods_food_types")
+}
+
+model users {
+  id       Int    @id @default(autoincrement())
+  username String @unique(map: "username") @db.VarChar(255)
+  password String @db.VarChar(255)
+  role     String @db.VarChar(20)
 }
