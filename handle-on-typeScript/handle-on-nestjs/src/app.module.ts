@@ -1,12 +1,20 @@
+import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { FoodModule } from './food/food.module';
+import { AuthModule } from './auth/auth.module';
+import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
-  imports: [UserModule, FoodModule],
+  imports: [
+    UserModule,
+    FoodModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtStrategy],
 })
-export class AppModule {}
+export class AppModule { }
