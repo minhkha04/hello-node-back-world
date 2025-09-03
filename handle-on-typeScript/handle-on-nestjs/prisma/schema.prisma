@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model food_types {
+  id    Int     @id @default(autoincrement())
+  type  String  @db.VarChar(255)
+  foods foods[]
+}
+
+model foods {
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(255)
+  food_type_id Int
+  food_types   food_types @relation(fields: [food_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_foods_food_types")
+
+  @@index([food_type_id], map: "FK_foods_food_types")
+}
+
+model users {
+  id       Int    @id @default(autoincrement())
+  username String @unique(map: "username") @db.VarChar(255)
+  password String @db.VarChar(255)
+  role     String @db.VarChar(20)
+}
