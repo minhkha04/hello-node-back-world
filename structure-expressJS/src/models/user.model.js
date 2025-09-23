@@ -1,0 +1,31 @@
+import mongoose from 'mongoose';
+import { ACCOUNT_TYPE } from '../contants/account-type.contant.js';
+import { ROLE } from '../contants/role.contant.js';
+
+// Định nghĩa schema cho User
+const userSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    accout_type: {
+        type: String,
+        enum: [ACCOUNT_TYPE.LOCAL, ACCOUNT_TYPE.GOOGLE, ACCOUNT_TYPE.FACEBOOK],
+    },
+    role: {
+        type: String,
+        enum: [ROLE.ADMIN, ROLE.USER],
+    }
+}, { timestamps: true }
+);
+
+userSchema.index({ email: 1, accout_type: 1 }, { unique: true });
+const User = mongoose.model('User', userSchema);
+
+export default User;
