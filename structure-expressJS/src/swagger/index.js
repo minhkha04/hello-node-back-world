@@ -1,4 +1,3 @@
-import { authSchemas } from '../schemas/auth.schema.js';
 import { authSwagger } from '../swagger/auth.swagger.js';
 
 const swaggerDocument = {
@@ -21,9 +20,6 @@ const swaggerDocument = {
     },
 
     components: {
-        schemas: {
-            ...authSchemas,
-        },
         securitySchemes: {
             bearerAuth: {
                 type: 'http',

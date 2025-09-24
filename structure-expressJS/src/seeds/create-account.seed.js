@@ -2,6 +2,7 @@ import { env } from '../config/environment.js'
 import { ACCOUNT_TYPE } from '../contants/account-type.contant.js';
 import { ROLE } from '../contants/role.contant.js'
 import { UserRepository } from '../repositories/user.repository.js';
+import { hash } from '../utils/bcrypt.util.js';
 
 export const CreateAccountSeed = async () => {
     const email = env.ADMIN_EMAIL;
@@ -11,10 +12,10 @@ export const CreateAccountSeed = async () => {
     if (!user) {
         user = await UserRepository.createUser({
             email,
-            password,
+            password: await hash(password),
             accout_type: ACCOUNT_TYPE.LOCAL,
-            role: ROLE.ADMIN
+            role: ROLE.ADMIN,
         });
     }
-    console.log('Admint account have been created with email: ', email, ' password: ', password);
+    console.log('Admin account have been created with email: ', email, ' password: ', password);
 };

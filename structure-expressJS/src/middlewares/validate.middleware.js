@@ -1,4 +1,3 @@
-import { errorResponse } from "../utils/response.util.js";
 import { BaseError } from "../utils/base-error.util.js";
 
 export const validate = (schema) => {
@@ -12,9 +11,7 @@ export const validate = (schema) => {
             }));
 
             // tạo BaseError để errorResponse xử lý
-            const validationError = new BaseError(400, "Dữ liệu không hợp lệ", details);
-
-            return errorResponse(res, validationError, 400);
+            throw new BaseError(400, "Dữ liệu không hợp lệ", details);
         }
 
         req.body = value;

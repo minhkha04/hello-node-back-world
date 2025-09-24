@@ -1,3 +1,4 @@
+import e from 'express';
 import Joi from 'joi';
 
 export const LoginRequest = Joi.object({
@@ -13,5 +14,16 @@ export const LoginRequest = Joi.object({
         .messages({
             'string.min': 'Password phải có ít nhất 6 ký tự',
         }),
-    access_token: Joi.string().optional(),
+    token_third_party: Joi.string()
+        .optional(),
+});
+
+export const SendOtpRequest = Joi.object({
+    email: Joi.string()
+        .email()
+        .required()
+        .messages({
+            'string.email': 'Email không hợp lệ',
+            'any.required': 'Email là bắt buộc',
+        })
 });

@@ -39,7 +39,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static('.'));
 
-connectDB();
+await connectDB();
 
 app.get('/', (req, res) => {
     res.send('<h1>Welcome to the Express.js Server</h1><p>Use the /api endpoint for API routes.</p><p>Use the /api-docs endpoint for swagger</p>');
