@@ -1,10 +1,11 @@
-import { authSwagger } from '../swagger/auth.swagger.js';
-
+import { AuthSwagger } from '../swagger/auth.swagger.js';
+import { env } from '../config/environment.js';
+import { UserSwagger } from './user.swagger.js';
 const swaggerDocument = {
 
     openapi: '3.0.0',
     info: {
-        title: 'My App',
+        title: `${env.APP_NAME} API Documentation`,
         version: '1.0.0',
     },
 
@@ -16,7 +17,8 @@ const swaggerDocument = {
     ],
 
     paths: {
-        ...authSwagger,
+        ...AuthSwagger,
+        ...UserSwagger,
     },
 
     components: {

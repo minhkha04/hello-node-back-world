@@ -3,7 +3,7 @@ import { sha256 } from "../utils/crypto.util.js";
 import { RefreshTokenRepository } from "../repositories/refresh-token.repository.js";
 import { BaseError } from "../utils/base-error.util.js";
 
-export const refreshTokenService = {
+export const RefreshTokenService = {
     async generate(user, createdByIp, device) {
         // Sinh JWT refresh token
         const refreshToken = jwtUtils.signRefreshToken(user);
@@ -88,4 +88,8 @@ export const refreshTokenService = {
             await RefreshTokenRepository.update(tokenDoc._id, tokenDoc);
         }
     },
+
+    async revokeAllForUser(userId, ) {
+        await RefreshTokenRepository.revokeAllForUser(userId);
+    }
 };

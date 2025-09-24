@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { MailType } from "../constants/mail.constant.js"; // nhớ thêm .js khi import file local
+import { MAIL_TYPE } from "../contants/mail.contant.js"; // nhớ thêm .js khi import file local
 import fs from "fs-extra";
 import handlebars from "handlebars";
 import { env } from "../config/environment.js";
@@ -29,7 +29,7 @@ async function renderTemplate(fileName, data) {
         const layout = handlebars.compile(layoutHTML);
         const body = handlebars.compile(bodyHTML)(data);
 
-        return layout({ body, ...data, year: new Date().getFullYear(), appName: "My App" });
+        return layout({ body, ...data, year: new Date().getFullYear(), appName: env.APP_NAME });
     } catch (e) {
         throw new BaseError(500, "Error rendering email template: " + e.message);
     }
@@ -40,19 +40,19 @@ async function sendMail(to, type, data = {}) {
     let templateFile = "";
 
     switch (type) {
-        case MailType.REGISTER_SUCCESS:
+        case MAIL_TYPE.REGISTER_SUCCESS:
             subject = "Đăng ký tài khoản thành công";
             templateFile = "register-success.html";
             break;
-        case MailType.SIGN_UP:
+        case MAIL_TYPE.SIGN_UP:
             subject = "OTP xác thực đăng ký";
             templateFile = "sign-up.html";
             break;
-        case MailType.RESET_PASSWORD:
+        case MAIL_TYPE.RESET_PASSWORD:
             subject = "Khôi phục mật khẩu";
             templateFile = "reset-password.html";
             break;
-        case MailType.ACCOUNT_CREATED:
+        case MAIL_TYPE.ACCOUNT_CREATED:
             subject = "Tài khoản của bạn đã được tạo";
             templateFile = "account-created.html";
             break;
@@ -64,7 +64,7 @@ async function sendMail(to, type, data = {}) {
     const html = await renderTemplate(templateFile, data);
 
     const mailOptions = {
-        from: `"My App" <${env.MAIL_USER}>`,
+        from: `${env.APP_NAME} <${env.MAIL_USER}>`,
         to,
         subject,
         html,

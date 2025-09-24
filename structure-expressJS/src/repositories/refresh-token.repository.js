@@ -6,7 +6,7 @@ export const RefreshTokenRepository = {
     },
 
     async findByHash(tokenHash) {
-        return await RefreshToken.find({
+        return await RefreshToken.findOne({
             tokenHash,
             isRevoked: false,
         })
@@ -14,5 +14,16 @@ export const RefreshTokenRepository = {
 
     async update(id, data) {
         return await RefreshToken.findByIdAndUpdate(id, data, { new: true });
+    },
+
+    async revokeAllForUser(userId, ip) {
+        return await RefreshToken.updateMany(
+            { isRevoked: false, user: userId },
+            {
+                isRevoked: true,
+                revokedAt: new Date(),
+                revokedByIp: ip,
+            }
+        );
     }
 }

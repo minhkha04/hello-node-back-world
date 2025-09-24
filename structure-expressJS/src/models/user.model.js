@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    accout_type: {
+    accountType: {
         type: String,
         enum: [ACCOUNT_TYPE.LOCAL, ACCOUNT_TYPE.GOOGLE, ACCOUNT_TYPE.FACEBOOK],
     },
@@ -26,10 +26,13 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    fullName: {
+        type: String,
+    },
 }, { timestamps: true }
 );
 
-userSchema.index({ email: 1, accout_type: 1 }, { unique: true });
+userSchema.index({ email: 1, accountType: 1 }, { unique: true });
 const User = mongoose.model('User', userSchema);
 
 export default User;

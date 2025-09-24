@@ -6,7 +6,7 @@ export const OtpRepository = {
     },
 
     async findByEmail(email) {
-        return OtpModel.find({ email });
+        return OtpModel.findOne({ email });
     },
 
     async deleteByEmail(email) {

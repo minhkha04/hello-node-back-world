@@ -13,7 +13,7 @@ export const CreateAccountSeed = async () => {
         user = await UserRepository.createUser({
             email,
             password: await hash(password),
-            accout_type: ACCOUNT_TYPE.LOCAL,
+            accountType: ACCOUNT_TYPE.LOCAL,
             role: ROLE.ADMIN,
         });
     }
